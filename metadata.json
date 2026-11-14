@@ -1,0 +1,6 @@
+{
+  "name": "Possible Ugwa — Retention Video Editor",
+  "description": "Portfolio of Possible Ugwa, a retention-focused video editor crafting scroll-stopping vlogs, talking-head videos, and motion design.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
