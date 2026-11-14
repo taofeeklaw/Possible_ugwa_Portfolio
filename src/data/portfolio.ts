@@ -6,6 +6,9 @@ import sampleMotionImg from '../assets/images/sample_motion_design_1794680126126
 export const ABOUT_PORTRAIT_URL =
   'https://drive.google.com/file/d/1w9Sq3arJXqV_VeNoos54nklKWTe-JhqV/view?usp=sharing';
 
+export const HERO_VIDEO_URL =
+  'https://ik.imagekit.io/triptee/possible_vids/dc4e5cb6d14e3c611bb930561024b31f.mp4';
+
 export interface WorkItem {
   id: string;
   title: string;
@@ -13,139 +16,135 @@ export interface WorkItem {
   type: 'video' | 'image';
   format: '9:16' | '16:9';
   duration: string;
-  driveUrl: string;
-  thumbnailDriveUrl: string;
+  videoUrl: string;
+  thumbnailUrl: string;
   description: string;
   featured: boolean;
 }
 
-/**
- * Centralized Work Portfolio Items
- * Supports local/direct .mp4/.mov paths or Google Drive share links.
- */
 export const WORK_ITEMS: WorkItem[] = [
   {
-    id: 'work-01',
+    id: 'work-1',
     title: 'Editorial Motion Sequence 01',
     category: 'Motion Design',
     type: 'video',
     format: '16:9',
     duration: '0:38',
-    driveUrl:
-      'https://drive.google.com/file/d/1MkoCdWdqyOHOFJdwjL496-Smg0IfsvXR/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/dc4e5cb6d14e3c611bb930561024b31f.mp4',
+    thumbnailUrl: '',
     description:
       'Custom typography animation, clean UI callouts, and rhythmic sound design synced to keyframe easing.',
     featured: true,
   },
   {
-    id: 'work-02',
+    id: 'work-2',
     title: 'High-Retention Vertical Reel 01',
     category: 'Talking-Head',
     type: 'video',
     format: '9:16',
     duration: '0:45',
-    driveUrl:
-      'https://drive.google.com/file/d/1-qlLwqmOUk727ipB0E7FPGt8SC5Rfsu3/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/22ace782b0a084267a04a212375af52f.mp4',
+    thumbnailUrl: '',
     description:
       'Frame-tight punch-ins, kinetic caption timing, and pattern interrupts in the opening 3 seconds.',
     featured: true,
   },
   {
-    id: 'work-03',
+    id: 'work-3',
     title: 'Creator Vlog & Story Edit 01',
     category: 'Vlog',
     type: 'video',
     format: '9:16',
     duration: '1:20',
-    driveUrl:
-      'https://drive.google.com/file/d/1LE1nYhWteDojAUY29qvjeFEuWUeMiz2_/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/c7728ddd933561ec22927a0c162639d6.mp4',
+    thumbnailUrl: '',
     description:
       'Paced story arc, J-cut audio transitions, and atmospheric color grade built for retention.',
     featured: true,
   },
   {
-    id: 'work-04',
+    id: 'work-4',
     title: 'Kinetic Typography Reel 02',
     category: 'Motion Design',
     type: 'video',
     format: '9:16',
     duration: '0:52',
-    driveUrl:
-      'https://drive.google.com/file/d/1SJwoCyXHlaf4Kgkv4TdvXkpJdtjW2GOC/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/617a31847e949e175edd1a3ba912798c.mp4',
+    thumbnailUrl: '',
     description:
       'Dynamic data-card motion, crisp vector highlights, and scroll-stopping visual transitions.',
     featured: true,
   },
   {
-    id: 'work-05',
+    id: 'work-5',
     title: 'Founder Commentary Short 02',
     category: 'Talking-Head',
     type: 'video',
     format: '9:16',
     duration: '0:58',
-    driveUrl:
-      'https://drive.google.com/file/d/1vdf24fFsSZ92Gpa3APsg_iofTgbF8epu/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/7d957de4237f62b6d70da6ecaa905add.mp4',
+    thumbnailUrl: '',
     description:
       'Tightened breath-pauses, B-roll layering, and clean visual pacing to hold watch-through past 75%.',
     featured: false,
   },
   {
-    id: 'work-06',
+    id: 'work-6',
     title: 'Narrative Vlog Edit 02',
     category: 'Vlog',
     type: 'video',
     format: '9:16',
     duration: '1:45',
-    driveUrl:
-      'https://drive.google.com/file/d/1l8FA7oepaH4JS6QyPOl1ajDL9GRrU-8h/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/270b45887aee7dd43aa292d8c1406f84.mp4',
+    thumbnailUrl: '',
     description:
       'Soundtrack swell timing, crisp SFX beds, and narrative chapter pacing from intro hook to outro.',
     featured: false,
   },
   {
-    id: 'work-07',
+    id: 'work-7',
     title: 'Brand Visual Motion Reel 03',
     category: 'Motion Design',
     type: 'video',
     format: '9:16',
     duration: '0:48',
-    driveUrl:
-      'https://drive.google.com/file/d/15zkPvStLmI22IMrdr5pTtx1U1xLKO2TM/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/3b6b2fde75ca262f8db5a436d3179c2a.mp4',
+    thumbnailUrl: '',
     description:
       'Polished keyframe transitions, graphic overlays, and clean sound-designed motion accents.',
     featured: false,
   },
   {
-    id: 'work-08',
+    id: 'work-8',
     title: 'Direct-to-Camera Hook Cut 03',
     category: 'Talking-Head',
     type: 'video',
     format: '9:16',
     duration: '0:42',
-    driveUrl:
-      'https://drive.google.com/file/d/1_JBIP3WlVch90VE-YvFD_UJV0_K-WeT0/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/40b6d6c816dbda4e84d00fb278e16f04.mp4',
+    thumbnailUrl: '',
     description:
       'Snap-cut pacing, subtle zoom emphasis, and high-clarity caption choreography.',
     featured: false,
   },
   {
-    id: 'work-09',
+    id: 'work-9',
     title: 'Documentary Pacing Cut 03',
     category: 'Vlog',
     type: 'video',
     format: '9:16',
     duration: '1:30',
-    driveUrl:
-      'https://drive.google.com/file/d/1-MRcxZfzZ8WThrQgGSvhrsoxyoDccwPE/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/35bd10cb58e32c9ae274a94ef1156c43.mp4',
+    thumbnailUrl: '',
     description:
       'Seamless scene transitions, balanced dialogue mix, and visual rhythm engineered for completion.',
     featured: false,
@@ -157,9 +156,9 @@ export const WORK_ITEMS: WorkItem[] = [
     type: 'video',
     format: '9:16',
     duration: '0:40',
-    driveUrl:
-      'https://drive.google.com/file/d/1ESwCuxQkj4aSlCznOqlfO2nEIuylV7FF/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/f73551339678b138570842742bc8dd68.mp4',
+    thumbnailUrl: '',
     description:
       'Crisp animated callouts and kinetic visual storytelling built for vertical feeds.',
     featured: false,
@@ -171,9 +170,9 @@ export const WORK_ITEMS: WorkItem[] = [
     type: 'video',
     format: '16:9',
     duration: '0:50',
-    driveUrl:
-      'https://drive.google.com/file/d/1V6jf2MCUvqF3Rkz0Yv7basb0ELV97gPq/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/58bc8b143dddfbe13bc29bef71122ab9.mp4',
+    thumbnailUrl: '',
     description:
       'Scroll-stopping first-frame hook with clean B-roll inserts and tight rhythmic cuts.',
     featured: false,
@@ -185,16 +184,14 @@ export const WORK_ITEMS: WorkItem[] = [
     type: 'video',
     format: '9:16',
     duration: '1:15',
-    driveUrl:
-      'https://drive.google.com/file/d/1n3e1UIh8b3xrIVJ2FwB8asIly2hsXgLK/view?usp=drive_link',
-    thumbnailDriveUrl: '',
+    videoUrl:
+      'https://ik.imagekit.io/triptee/possible_vids/abbe95424c324e7c337b16f9ed4abc27.mp4',
+    thumbnailUrl: '',
     description:
       'Cohesive color grading, ambient audio layering, and story-first timeline assembly.',
     featured: false,
   },
 ];
-
-export const HERO_VIDEO_ITEM = WORK_ITEMS[0];
 
 export const WORK_CATEGORIES = [
   'All',

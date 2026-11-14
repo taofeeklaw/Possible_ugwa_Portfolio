@@ -7,7 +7,7 @@ import {
   WORK_ITEMS,
   WorkItem,
 } from '../data/portfolio';
-import { isDirectVideoUrl, resolveWorkThumbnail } from '../utils/videoUrl';
+import { resolveVideoPoster } from '../utils/videoUrl';
 import { VideoLightboxModal } from './VideoLightboxModal';
 
 function getCardsPerView(width: number): number {
@@ -23,7 +23,6 @@ export function WorkSection() {
   const [cardsPerView, setCardsPerView] = useState<number>(() =>
     typeof window !== 'undefined' ? getCardsPerView(window.innerWidth) : 3
   );
-  const [fallbackImages, setFallbackImages] = useState<Record<string, boolean>>({});
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
@@ -43,7 +42,6 @@ export function WorkSection() {
 
   const maxStartIndex = Math.max(0, filteredItems.length - cardsPerView);
 
-  // Clamp slide index if viewport width or category changes
   useEffect(() => {
     setStartIndex((prev) => Math.min(prev, maxStartIndex));
   }, [maxStartIndex]);
@@ -190,7 +188,7 @@ export function WorkSection() {
           </div>
         </div>
 
-        {/* One Responsive Swipeable 9:16 Motion Carousel */}
+        {/* One Responsive Swipeable Motion Carousel */}
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
@@ -203,15 +201,15 @@ export function WorkSection() {
               className="flex"
             >
               {filteredItems.map((item) => {
-                const directVideo = isDirectVideoUrl(item.driveUrl);
                 const isLandscape = item.format === '16:9';
                 const mediaFitClass = isLandscape
                   ? 'h-full w-full bg-black object-contain'
                   : 'h-full w-full object-cover';
-                const fallbackThumb = getFallbackThumbnail(item.category);
-                const thumbnailSrc = fallbackImages[item.id]
-                  ? fallbackThumb
-                  : resolveWorkThumbnail(item, fallbackThumb);
+                const posterSrc = resolveVideoPoster(
+                  item.videoUrl,
+                  item.thumbnailUrl,
+                  getFallbackThumbnail(item.category)
+                );
 
                 return (
                   <div
@@ -225,29 +223,25 @@ export function WorkSection() {
                         aria-label={`Play ${item.title} (${item.category}, ${item.duration})`}
                         className="relative block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#F59E0B]"
                       >
-                        {/* Card Media Stage */}
+                        {/* Card Video Stage */}
                         <div className="relative aspect-[9/16] w-full overflow-hidden bg-black">
-                          {directVideo ? (
+                          {item.videoUrl ? (
                             <video
-                              src={item.driveUrl}
+                              src={item.videoUrl}
+                              poster={posterSrc}
                               preload="metadata"
                               muted
                               playsInline
+                              controlsList="nodownload"
+                              disablePictureInPicture
+                              onContextMenu={(e) => e.preventDefault()}
                               className={`${mediaFitClass} transition-transform duration-300 group-hover:scale-[1.02]`}
                             />
                           ) : (
                             <img
-                              src={thumbnailSrc}
+                              src={posterSrc}
                               alt={item.title}
                               referrerPolicy="no-referrer"
-                              onError={() => {
-                                if (!fallbackImages[item.id]) {
-                                  setFallbackImages((prev) => ({
-                                    ...prev,
-                                    [item.id]: true,
-                                  }));
-                                }
-                              }}
                               className={`${mediaFitClass} transition-transform duration-300 group-hover:scale-[1.02]`}
                             />
                           )}

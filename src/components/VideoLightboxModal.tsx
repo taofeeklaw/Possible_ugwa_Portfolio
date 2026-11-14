@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Play, X } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import {
   formatTimecode,
   getFallbackThumbnail,
   WorkItem,
 } from '../data/portfolio';
-import { resolveWorkMedia, resolveWorkThumbnail } from '../utils/videoUrl';
+import { resolveVideoPoster } from '../utils/videoUrl';
 
 interface VideoLightboxModalProps {
   item: WorkItem | null;
@@ -22,7 +22,6 @@ export function VideoLightboxModal({
   onNext,
   hasMultiple,
 }: VideoLightboxModalProps) {
-  const [thumbError, setThumbError] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const handleClose = () => {
@@ -33,7 +32,6 @@ export function VideoLightboxModal({
   };
 
   useEffect(() => {
-    setThumbError(false);
     return () => {
       if (videoRef.current) {
         videoRef.current.pause();
@@ -66,12 +64,13 @@ export function VideoLightboxModal({
 
   if (!item) return null;
 
-  const resolvedMedia = resolveWorkMedia(item);
-  const fallbackThumb = getFallbackThumbnail(item.category);
-  const thumbnailSrc = thumbError
-    ? fallbackThumb
-    : resolveWorkThumbnail(item, fallbackThumb);
+  const isVertical = item.format === '9:16';
   const timecode = formatTimecode(item.duration);
+  const posterSrc = resolveVideoPoster(
+    item.videoUrl,
+    item.thumbnailUrl,
+    getFallbackThumbnail(item.category)
+  );
 
   return (
     <div
@@ -82,7 +81,7 @@ export function VideoLightboxModal({
       onClick={handleClose}
     >
       <div
-        className="relative flex max-h-[92vh] w-[95vw] max-w-4xl flex-col overflow-y-auto rounded-2xl border border-[#27272A] bg-[#121216] shadow-2xl"
+        className="relative flex max-h-[92vh] w-[95vw] max-w-3xl flex-col overflow-y-auto rounded-2xl border border-[#27272A] bg-[#121216] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Modal Header */}
@@ -128,71 +127,38 @@ export function VideoLightboxModal({
           </div>
         </div>
 
-        {/* Modal Body: Full-Width Player + Compact Details */}
+        {/* Modal Body: Native Video Player + Compact Details */}
         <div className="flex flex-col p-3 sm:p-5">
-          {resolvedMedia?.type === 'iframe' ? (
-            <div className="relative w-full aspect-[4/3] sm:aspect-video max-h-[68vh] overflow-hidden rounded-xl bg-black">
-              <iframe
-                src={resolvedMedia.src}
-                title={item.title}
-                sandbox="allow-scripts allow-same-origin allow-presentation"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full border-0"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute top-2.5 right-2.5 z-10 flex min-h-[48px] min-w-[52px] select-none items-center gap-2 rounded-lg border border-[#27272A] bg-[#121216] px-3.5 py-2 text-xs font-medium text-[#FAFAFA] shadow-lg"
-              >
-                <span className="h-1.5 w-1.5 bg-[#F59E0B]" />
-                <span>Possible Ugwa</span>
-              </div>
-            </div>
-          ) : resolvedMedia?.type === 'video' ? (
-            <div className="w-full max-h-[65vh] overflow-hidden rounded-xl bg-black">
+          <div
+            className={
+              isVertical
+                ? 'mx-auto aspect-[9/16] h-[58vh] max-h-[540px] w-auto overflow-hidden rounded-xl bg-black'
+                : 'aspect-video w-full max-h-[65vh] overflow-hidden rounded-xl bg-black'
+            }
+          >
+            {item.videoUrl ? (
               <video
                 ref={videoRef}
-                src={resolvedMedia.src}
+                key={item.id}
+                src={item.videoUrl}
+                poster={posterSrc}
                 controls
                 autoPlay
                 playsInline
-                className="h-full max-h-[65vh] w-full bg-black object-contain"
+                controlsList="nodownload"
+                disablePictureInPicture
+                onContextMenu={(e) => e.preventDefault()}
+                className="h-full w-full bg-black object-contain"
               />
-            </div>
-          ) : resolvedMedia?.type === 'image' ? (
-            <div className="w-full aspect-[4/3] sm:aspect-video max-h-[65vh] overflow-hidden rounded-xl bg-black">
+            ) : (
               <img
-                src={resolvedMedia.src}
+                src={posterSrc}
                 alt={item.title}
                 referrerPolicy="no-referrer"
                 className="h-full w-full bg-black object-contain"
               />
-            </div>
-          ) : (
-            <div className="relative w-full aspect-[4/3] sm:aspect-video max-h-[65vh] overflow-hidden rounded-xl bg-black">
-              <img
-                src={thumbnailSrc}
-                alt={`${item.title} preview frame`}
-                referrerPolicy="no-referrer"
-                onError={() => {
-                  if (!thumbError) setThumbError(true);
-                }}
-                className="h-full w-full object-cover opacity-55"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-t from-[#09090B]/95 via-[#09090B]/55 to-[#09090B]/40"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#F59E0B]/50 bg-[#121216]/90 text-[#F59E0B]">
-                  <Play className="h-5 w-5 fill-current translate-x-0.5" />
-                </div>
-                <p className="mt-3 text-sm font-semibold text-[#FAFAFA]">
-                  Sample Reel Preview
-                </p>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Title & Description Below Player */}
           <div className="shrink-0 pt-3 sm:pt-4">
