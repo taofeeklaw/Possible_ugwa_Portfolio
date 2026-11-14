@@ -111,13 +111,23 @@ export function Hero() {
                   </button>
                 </>
               ) : heroMedia?.type === 'iframe' ? (
-                <iframe
-                  src={heroMedia.src}
-                  title={HERO_VIDEO_ITEM.title}
-                  allow="autoplay; fullscreen; picture-in-picture"
-                  allowFullScreen
-                  className="h-full w-full border-0"
-                />
+                <>
+                  <iframe
+                    src={heroMedia.src}
+                    title={HERO_VIDEO_ITEM.title}
+                    sandbox="allow-scripts allow-same-origin allow-presentation"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowFullScreen
+                    className="h-full w-full border-0"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="absolute top-3 right-3 z-10 flex min-h-[48px] min-w-[52px] select-none items-center gap-2 rounded-lg border border-[#27272A] bg-[#121216] px-3.5 py-2 text-xs font-medium text-[#FAFAFA] shadow-lg"
+                  >
+                    <span className="h-1.5 w-1.5 bg-[#F59E0B]" />
+                    <span>Possible Ugwa</span>
+                  </div>
+                </>
               ) : null}
             </div>
           </motion.div>
