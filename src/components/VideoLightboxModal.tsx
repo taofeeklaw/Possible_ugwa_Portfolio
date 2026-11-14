@@ -42,14 +42,10 @@ export function VideoLightboxModal({
   onNext,
   hasMultiple,
 }: VideoLightboxModalProps) {
-  const [previewInput, setPreviewInput] = useState('');
-  const [activeUrl, setActiveUrl] = useState('');
   const [thumbError, setThumbError] = useState(false);
 
   useEffect(() => {
     if (!sample) return;
-    setPreviewInput(sample.videoUrl || '');
-    setActiveUrl(sample.videoUrl || '');
     setThumbError(false);
   }, [sample]);
 
@@ -78,13 +74,8 @@ export function VideoLightboxModal({
 
   if (!sample) return null;
 
-  const resolvedMedia = getEmbedUrl(activeUrl);
+  const resolvedMedia = getEmbedUrl(sample.videoUrl);
   const isVertical = sample.aspectRatio === '9:16';
-
-  const handleApplyPreviewUrl = (e: React.FormEvent) => {
-    e.preventDefault();
-    setActiveUrl(previewInput.trim());
-  };
 
   return (
     <div
@@ -95,11 +86,11 @@ export function VideoLightboxModal({
       onClick={onClose}
     >
       <div
-        className="relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-[#27272A] bg-[#121216] shadow-2xl"
+        className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-[#27272A] bg-[#121216] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Modal Header */}
-        <div className="flex items-center justify-between gap-4 border-b border-[#27272A] bg-[#0D0D10] px-5 py-3.5">
+        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-[#27272A] bg-[#0D0D10] px-5 py-3">
           <div className="flex min-w-0 items-center gap-3 text-xs text-[#A1A1AA]">
             <span className="font-mono tabular-nums text-[#F59E0B]">{sample.timecode}</span>
             <span aria-hidden="true">·</span>
@@ -141,14 +132,14 @@ export function VideoLightboxModal({
           </div>
         </div>
 
-        {/* Video Preview Stage */}
-        <div className="flex flex-1 flex-col overflow-y-auto p-5 sm:p-6">
-          <div className="flex w-full items-center justify-center rounded-lg border border-[#27272A] bg-[#09090B] p-4 sm:p-6">
+        {/* Video Preview Stage & Details */}
+        <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 sm:p-6">
+          <div className="flex min-h-0 flex-1 items-center justify-center rounded-lg border border-[#27272A] bg-[#09090B] p-3 sm:p-5">
             <div
               className={`relative overflow-hidden rounded-md border border-[#27272A] bg-[#121216] ${
                 isVertical
-                  ? 'aspect-[9/16] w-full max-w-[290px]'
-                  : 'aspect-video w-full max-w-3xl'
+                  ? 'aspect-[9/16] w-full max-w-[min(18rem,calc(52vh*0.5625))] max-h-[52vh]'
+                  : 'aspect-video w-full max-w-[min(46rem,calc(52vh*1.777))] max-h-[52vh]'
               }`}
             >
               {resolvedMedia?.type === 'mp4' ? (
@@ -188,15 +179,15 @@ export function VideoLightboxModal({
                     className="absolute inset-0 bg-gradient-to-t from-[#09090B]/95 via-[#09090B]/60 to-[#09090B]/40"
                   />
 
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[#F59E0B]/50 bg-[#121216]/90 text-[#F59E0B]">
-                      <Play className="h-6 w-6 fill-current translate-x-0.5" />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-5 text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#F59E0B]/50 bg-[#121216]/90 text-[#F59E0B]">
+                      <Play className="h-5 w-5 fill-current translate-x-0.5" />
                     </div>
 
-                    <p className="mt-4 max-w-xs text-sm font-semibold text-[#FAFAFA]">
+                    <p className="mt-3.5 max-w-xs text-sm font-semibold text-[#FAFAFA]">
                       {sample.placeholderLabel}
                     </p>
-                    <p className="mt-1.5 font-mono text-xs tabular-nums text-[#A1A1AA]">
+                    <p className="mt-1 font-mono text-xs tabular-nums text-[#A1A1AA]">
                       {sample.formatLabel} · {sample.aspectRatio} · {sample.duration}
                     </p>
 
@@ -217,42 +208,17 @@ export function VideoLightboxModal({
             </div>
           </div>
 
-          {/* Sample Details & Optional Quick Link Tester */}
-          <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div className="max-w-xl">
-              <h3
-                id="lightbox-title"
-                className="font-display text-xl font-semibold text-[#FAFAFA]"
-              >
-                {sample.title}
-              </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-[#A1A1AA]">
-                {sample.notes}
-              </p>
-            </div>
-
-            <form
-              onSubmit={handleApplyPreviewUrl}
-              className="flex w-full max-w-sm items-center gap-2"
+          {/* Sample Details */}
+          <div className="flex shrink-0 flex-col gap-1.5">
+            <h3
+              id="lightbox-title"
+              className="font-display text-lg font-semibold text-[#FAFAFA] sm:text-xl"
             >
-              <label htmlFor="sample-url-test" className="sr-only">
-                Test MP4, YouTube, or Drive Link
-              </label>
-              <input
-                id="sample-url-test"
-                type="url"
-                value={previewInput}
-                onChange={(e) => setPreviewInput(e.target.value)}
-                placeholder="Paste MP4 / YouTube / Drive link..."
-                className="min-h-[40px] flex-1 rounded-md border border-[#27272A] bg-[#09090B] px-3 py-2 text-xs text-[#FAFAFA] placeholder:text-[#71717A] focus:border-[#F59E0B] focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="min-h-[40px] whitespace-nowrap shrink-0 rounded-md border border-[#27272A] bg-[#18181D] px-3.5 py-2 text-xs font-medium text-[#FAFAFA] transition-colors hover:border-[#F59E0B] hover:text-[#F59E0B]"
-              >
-                Load Clip
-              </button>
-            </form>
+              {sample.title}
+            </h3>
+            <p className="max-w-2xl text-sm leading-relaxed text-[#A1A1AA]">
+              {sample.notes}
+            </p>
           </div>
         </div>
       </div>
