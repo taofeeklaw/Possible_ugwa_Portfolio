@@ -1,10 +1,17 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Film } from 'lucide-react';
-import { SITE_ASSETS, SPECIALTIES } from '../data/portfolioData';
+import {
+  ABOUT_PORTRAIT_URL,
+  SITE_ASSETS,
+  SPECIALTIES,
+} from '../data/portfolio';
+import { toDriveImageUrl } from '../utils/videoUrl';
 
 export function AboutSection() {
   const [imageError, setImageError] = useState(false);
+  const portraitSrc = imageError
+    ? SITE_ASSETS.aboutEditorDefault
+    : toDriveImageUrl(ABOUT_PORTRAIT_URL, SITE_ASSETS.aboutEditorDefault);
 
   return (
     <section
@@ -22,23 +29,16 @@ export function AboutSection() {
             className="lg:col-span-5"
           >
             <div className="relative overflow-hidden rounded-xl border border-[#27272A] bg-[#121216]">
-              <div className="aspect-[3/4] w-full bg-[#121216]">
-                {!imageError ? (
-                  <img
-                    src={SITE_ASSETS.aboutEditor}
-                    alt="Possible Ugwa working in a dark post-production editing suite"
-                    referrerPolicy="no-referrer"
-                    onError={() => setImageError(true)}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-b from-[#121216] to-[#09090B] p-8">
-                    <div className="text-center">
-                      <Film className="mx-auto h-10 w-10 text-[#F59E0B]" />
-                      <p className="mt-3 text-sm text-[#A1A1AA]">Possible Ugwa</p>
-                    </div>
-                  </div>
-                )}
+              <div className="aspect-[4/5] w-full bg-[#121216]">
+                <img
+                  src={portraitSrc}
+                  alt="Possible Ugwa working in a dark post-production editing suite"
+                  referrerPolicy="no-referrer"
+                  onError={() => {
+                    if (!imageError) setImageError(true);
+                  }}
+                  className="h-full w-full object-cover object-top"
+                />
               </div>
 
               <div

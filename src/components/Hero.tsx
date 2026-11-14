@@ -1,18 +1,29 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Play } from 'lucide-react';
-import { SITE_ASSETS } from '../data/portfolioData';
+import { ArrowRight, Play, Volume2, VolumeX } from 'lucide-react';
+import { HERO_VIDEO_ITEM } from '../data/portfolio';
+import { resolveWorkMedia } from '../utils/videoUrl';
 
 export function Hero() {
-  const [imageError, setImageError] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const heroMedia = resolveWorkMedia(HERO_VIDEO_ITEM);
+
+  const handleToggleMute = () => {
+    const nextMuted = !isMuted;
+    setIsMuted(nextMuted);
+    if (videoRef.current) {
+      videoRef.current.muted = nextMuted;
+    }
+  };
 
   return (
     <section
       id="top"
-      className="relative border-b border-[#27272A] bg-[#09090B] py-16 sm:py-20 lg:py-24"
+      className="relative border-b border-[#27272A] bg-[#09090B] pt-24 pb-16 lg:flex lg:min-h-[calc(100svh-4rem)] lg:items-center lg:py-24"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-stretch gap-10 lg:grid-cols-12 lg:gap-12">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
           {/* Left Typographic Column */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
@@ -20,7 +31,7 @@ export function Hero() {
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col justify-center lg:col-span-6"
           >
-            {/* Availability Badge (Clean Rectilinear Studio Label, Zero Pill) */}
+            {/* Availability Label */}
             <div className="mb-6 flex items-center gap-3 text-xs font-medium tracking-wider text-[#F59E0B]">
               <span
                 aria-hidden="true"
@@ -31,9 +42,9 @@ export function Hero() {
               <span className="font-mono tabular-nums text-[#A1A1AA]">00:00:01</span>
             </div>
 
-            <h1 className="text-balance font-display text-4xl font-bold tracking-tight text-[#FAFAFA] sm:text-5xl lg:text-[3.5rem] lg:leading-[1.06]">
+            <h1 className="text-balance font-display text-4xl font-bold tracking-tight text-[#FAFAFA] sm:text-5xl lg:text-6xl lg:leading-[1.06]">
               Meet Possible Ugwa
-              <span className="mt-2 block text-[#A1A1AA] font-semibold">
+              <span className="mt-2 block font-semibold text-[#A1A1AA]">
                 Video Editor
               </span>
             </h1>
@@ -42,7 +53,7 @@ export function Hero() {
               &ldquo;I edit videos that stop the scroll and keep viewers watching from the first second to the last.&rdquo;
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
                 href="#contact"
                 className="inline-flex min-h-[44px] items-center justify-center gap-2 whitespace-nowrap shrink-0 rounded-md bg-[#F59E0B] px-6 py-3 text-sm font-semibold text-[#09090B] transition-all duration-150 hover:bg-[#FBBF24] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
@@ -61,69 +72,53 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Right Editing Suite Visual Anchor */}
+          {/* Right Hero Video Showcase (work-01 16:9) */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-6 flex"
+            className="lg:col-span-6"
           >
-            <div className="relative flex w-full flex-col overflow-hidden rounded-xl border border-[#27272A] bg-[#121216]">
-              {/* Top Monitor Frame Bar */}
-              <div className="flex items-center justify-between border-b border-[#27272A] bg-[#0D0D10] px-4 py-2.5 text-xs text-[#A1A1AA]">
-                <span className="font-mono tabular-nums text-[#FAFAFA]">
-                  SEQ_01 · RETENTION_CUT
-                </span>
-                <span className="font-mono tabular-nums text-[#F59E0B]">
-                  16:9 · 24FPS
-                </span>
-              </div>
-
-              {/* Studio Suite Still */}
-              <div className="relative aspect-video w-full flex-1 bg-[#09090B] lg:aspect-auto lg:min-h-[320px]">
-                {!imageError ? (
-                  <img
-                    src={SITE_ASSETS.heroSuite}
-                    alt="Dark cinema editing desk with color-grading reference monitor and warm tungsten lighting"
-                    referrerPolicy="no-referrer"
-                    onError={() => setImageError(true)}
+            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[#27272A] bg-black shadow-2xl">
+              {heroMedia?.type === 'video' ? (
+                <>
+                  <video
+                    ref={videoRef}
+                    src={heroMedia.src}
+                    autoPlay
+                    loop
+                    muted={isMuted}
+                    playsInline
                     className="h-full w-full object-cover"
                   />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#121216] via-[#09090B] to-[#18181D] p-8">
-                    <div className="text-center">
-                      <Play className="mx-auto h-10 w-10 text-[#F59E0B]" />
-                      <p className="mt-3 text-sm text-[#A1A1AA]">Post-Production Suite</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Measured Gradient Scrim + Timecode Overlay */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#09090B]/85 via-transparent to-transparent"
+                  <button
+                    type="button"
+                    onClick={handleToggleMute}
+                    aria-label={isMuted ? 'Unmute showcase video' : 'Mute showcase video'}
+                    className="absolute right-3 bottom-3 inline-flex min-h-[40px] items-center gap-1.5 rounded-md border border-[#27272A] bg-[#09090B]/85 px-3 py-1.5 text-xs font-medium text-[#FAFAFA] backdrop-blur-sm transition-colors duration-150 hover:border-[#F59E0B] hover:text-[#F59E0B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B]"
+                  >
+                    {isMuted ? (
+                      <>
+                        <VolumeX className="h-3.5 w-3.5 text-[#F59E0B]" aria-hidden="true" />
+                        <span>Unmute</span>
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="h-3.5 w-3.5 text-[#F59E0B]" aria-hidden="true" />
+                        <span>Mute</span>
+                      </>
+                    )}
+                  </button>
+                </>
+              ) : heroMedia?.type === 'iframe' ? (
+                <iframe
+                  src={heroMedia.src}
+                  title={HERO_VIDEO_ITEM.title}
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowFullScreen
+                  className="h-full w-full border-0"
                 />
-
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between px-4 py-3">
-                  <span className="text-xs font-medium text-[#FAFAFA]">
-                    Cut for Retention · First Second to Last
-                  </span>
-                  <span className="font-mono text-xs tabular-nums text-[#F59E0B]">
-                    TC 00:00:01:00
-                  </span>
-                </div>
-              </div>
-
-              {/* Subtle Timeline Ruler Track */}
-              <div
-                aria-hidden="true"
-                className="flex items-center gap-1 border-t border-[#27272A] bg-[#0D0D10] px-4 py-2"
-              >
-                <span className="h-1.5 w-16 rounded-xs bg-[#F59E0B]" />
-                <span className="h-1.5 w-28 rounded-xs bg-[#27272A]" />
-                <span className="h-1.5 w-20 rounded-xs bg-[#3F3F46]" />
-                <span className="h-1.5 flex-1 rounded-xs bg-[#1C1C22]" />
-              </div>
+              ) : null}
             </div>
           </motion.div>
         </div>

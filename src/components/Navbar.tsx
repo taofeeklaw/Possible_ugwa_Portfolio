@@ -8,6 +8,7 @@ export function Navbar() {
     { label: 'About', href: '#about' },
     { label: 'Work', href: '#work' },
     { label: 'Why Me', href: '#why-me' },
+    { label: 'Reviews', href: '#testimonials' },
   ];
 
   const handleLinkClick = () => {

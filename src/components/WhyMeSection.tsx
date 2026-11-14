@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { WHY_ME_PROMISES } from '../data/portfolioData';
+import { WHY_ME_PROMISES } from '../data/portfolio';
 
 export function WhyMeSection() {
   return (
